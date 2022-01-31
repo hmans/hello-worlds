@@ -1,4 +1,4 @@
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Leva } from "leva";
 import "./App.css";
@@ -19,6 +19,7 @@ function App() {
       >
         <TerrainChunks />
         <Lights />
+        <Sky />
         <OrbitControls />
       </Canvas>
     </>

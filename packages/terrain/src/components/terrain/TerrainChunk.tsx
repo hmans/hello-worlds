@@ -1,5 +1,6 @@
+import { Text } from "@react-three/drei";
 import * as React from "react";
-import { FrontSide, PlaneGeometry, Vector3 } from "three";
+import { Euler, FrontSide, Material, PlaneGeometry, Vector3 } from "three";
 import { IHeightGenerator } from "../../heightgenerators";
 
 // function genHeightfieldGeometry(
@@ -103,6 +104,7 @@ import { IHeightGenerator } from "../../heightgenerators";
 // };
 
 export interface TerrainChunkProps {
+  name: string;
   width: number;
   scale: number;
   subdivisions?: number;
@@ -112,6 +114,7 @@ export interface TerrainChunkProps {
 }
 
 export const TerrainChunk: React.FC<TerrainChunkProps> = ({
+  name,
   width,
   scale,
   subdivisions = 128,
@@ -121,7 +124,9 @@ export const TerrainChunk: React.FC<TerrainChunkProps> = ({
   wireframe = false,
 }) => {
   const planeRef = React.useRef<PlaneGeometry>(null);
+  const matRef = React.useRef<Material>(null);
   const size = new Vector3(width * scale, 0, width * scale);
+  const [hovered, setHover] = React.useState(false);
 
   React.useEffect(() => {
     if (!planeRef.current) {
@@ -191,16 +196,32 @@ export const TerrainChunk: React.FC<TerrainChunkProps> = ({
   }, [planeRef, width, scale, subdivisions, offset, heightGenerators]);
 
   return (
-    <mesh position={offset} castShadow={false} receiveShadow={true}>
+    <mesh
+      position={offset}
+      castShadow={false}
+      receiveShadow={true}
+      onPointerOver={(e) => {
+        setHover(true);
+      }}
+      onPointerOut={(e) => setHover(false)}
+    >
+      <Text
+        position={new Vector3(0, 0, 50)}
+        rotation={new Euler(Math.PI / 2, 0, 0)}
+        scale={hovered ? 200 : 100}
+        color={hovered ? "pink" : "white"}
+      >
+        {name}
+      </Text>
       <planeGeometry
         ref={planeRef}
         args={[size.x, size.z, subdivisions, subdivisions]}
       />
       <meshStandardMaterial
+        ref={matRef}
         wireframe={wireframe}
-        color={0xfff}
         side={FrontSide}
-        // vertexColors
+        vertexColors
       />
       {children}
     </mesh>
