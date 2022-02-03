@@ -1,6 +1,13 @@
 import { Text } from "@react-three/drei";
 import * as React from "react";
-import { Euler, FrontSide, Material, PlaneGeometry, Vector3 } from "three";
+import {
+  Color,
+  Euler,
+  FrontSide,
+  Material,
+  PlaneGeometry,
+  Vector3,
+} from "three";
 import { IHeightGenerator } from "../../heightgenerators";
 
 // function genHeightfieldGeometry(
@@ -103,7 +110,7 @@ import { IHeightGenerator } from "../../heightgenerators";
 //   return <bufferGeometry ref={geoRef} />;
 // };
 
-export interface TerrainChunkProps {
+export interface TerrainChunkPlaneProps {
   name: string;
   width: number;
   scale: number;
@@ -113,7 +120,7 @@ export interface TerrainChunkProps {
   wireframe?: boolean;
 }
 
-export const TerrainChunk: React.FC<TerrainChunkProps> = ({
+export const TerrainChunkPlane: React.FC<TerrainChunkPlaneProps> = ({
   name,
   width,
   scale,
@@ -217,12 +224,23 @@ export const TerrainChunk: React.FC<TerrainChunkProps> = ({
         ref={planeRef}
         args={[size.x, size.z, subdivisions, subdivisions]}
       />
-      <meshStandardMaterial
-        ref={matRef}
-        wireframe={wireframe}
-        side={FrontSide}
-        vertexColors
-      />
+      {hovered ? (
+        <meshStandardMaterial
+          // ref={matRef}
+          wireframe={wireframe}
+          side={FrontSide}
+          color={new Color("purple")}
+          // vertexColors
+        />
+      ) : (
+        <meshStandardMaterial
+          // ref={matRef}
+          wireframe={wireframe}
+          side={FrontSide}
+          color={0xfff}
+          // vertexColors
+        />
+      )}
       {children}
     </mesh>
   );

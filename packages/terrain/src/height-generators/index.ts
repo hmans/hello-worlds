@@ -1,21 +1,20 @@
-import { MathUtils, Vector2 } from "three";
+import { MathUtils, Vector2, Vector3 } from "three";
 import { getImageData } from "../graphics/image";
 import { sat } from "../math";
 
-export interface Generator {
-  get(x: number, y: number): number;
+export interface Generator2<T = number> {
+  get(x: number, y: number): T;
+}
+export interface Generator3<T = number> {
+  get(x: number, y: number, z: number): T;
 }
 
-export interface IHeightGenerator {
-  get(x: number, y: number): number[];
-}
-
-export class HeightGenerator implements IHeightGenerator {
-  private position: Vector2;
+export class HeightGenerator implements Generator3<number[]> {
+  private position: Vector3;
   private radius: [number, number];
   constructor(
-    private generator: Generator,
-    position: Vector2,
+    private generator: Generator3,
+    position: Vector3,
     minRadius: number,
     maxRadius: number
   ) {
@@ -23,18 +22,19 @@ export class HeightGenerator implements IHeightGenerator {
     this.radius = [minRadius, maxRadius];
   }
 
-  get(x: number, y: number) {
-    const distance = this.position.distanceTo(new Vector2(x, y));
-    let normalization =
-      1.0 -
-      sat((distance - this.radius[0]) / (this.radius[1] - this.radius[0]));
-    normalization = normalization * normalization * (3 - 2 * normalization);
+  get(x: number, y: number, z: number) {
+    // const distance = this.position.distanceTo(new Vector2(x, y));
+    // let normalization =
+    //   1.0 -
+    //   sat((distance - this.radius[0]) / (this.radius[1] - this.radius[0]));
+    // normalization = normalization * normalization * (3 - 2 * normalization);
 
-    return [this.generator.get(x, y), normalization];
+    // return [this.generator.get(x, y), normalization];
+    return [this.generator.get(x, y, z), 1];
   }
 }
 
-export class FlaredCornerHeightGenerator implements IHeightGenerator {
+export class FlaredCornerHeightGenerator implements Generator2<number[]> {
   get(x: number, y: number) {
     if (x == -250 && y == 250) {
       return [128, 1];
@@ -43,7 +43,7 @@ export class FlaredCornerHeightGenerator implements IHeightGenerator {
   }
 }
 
-export class BumpHeightGenerator implements IHeightGenerator {
+export class BumpHeightGenerator implements Generator2<number[]> {
   get(x: number, y: number) {
     const dist = new Vector2(x, y).distanceTo(new Vector2(0, 0));
 
@@ -58,7 +58,7 @@ export interface HeightmapParams {
   width: number;
   img: HTMLImageElement;
 }
-export class Heightmap implements Generator {
+export class Heightmap implements Generator2 {
   private data: ImageData;
   constructor(private params: HeightmapParams) {
     this.data = getImageData(params.img);

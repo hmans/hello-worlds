@@ -5,6 +5,7 @@ import { HeightGenerator } from "../../heightgenerators";
 import Noise, { NoiseParams, NOISE_STYLES } from "../../noise/Noise";
 import { TerrainChunk, TerrainChunkProps } from "./TerrainChunk";
 
+// Equivalent to TerrainChunkManager on SDY
 export const TerrainChunks: React.FC = () => {
   const [chunkMap] = React.useState(
     new Map<string, { chunk: TerrainChunkProps; edges: string[] }>()
@@ -28,6 +29,27 @@ export const TerrainChunks: React.FC = () => {
       max: 128,
       value: 16,
       step: 1,
+    },
+  });
+
+  const planet = useControls("planet", {
+    planetRadius: {
+      min: 0,
+      max: 10_000_000,
+      value: 4000,
+      step: 10,
+    },
+    minCellSize: {
+      min: 0,
+      max: 10_000_000,
+      value: 500,
+      step: 10,
+    },
+    minCellResolution: {
+      min: 0,
+      max: 10_000_000,
+      value: 128,
+      step: 10,
     },
   });
 
