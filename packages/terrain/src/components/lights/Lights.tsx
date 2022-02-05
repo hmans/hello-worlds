@@ -12,16 +12,16 @@ export default function Lights() {
         ]}
       />
       <directionalLight
+        position={[1, 1, 1]} //
+        intensity={0.3}
+      />
+      <directionalLight
         ref={ref}
         castShadow //
         position={[-5, 3, -5]}
         intensity={3}
         shadowBias={-0.0002}
         color="white"
-      />
-      <directionalLight
-        position={[1, 1, 1]} //
-        intensity={0.3}
       />
     </group>
   );

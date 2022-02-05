@@ -3,9 +3,9 @@ import * as React from "react";
 import {
   BufferAttribute,
   Color,
-  DoubleSide,
   Euler,
   Float32BufferAttribute,
+  FrontSide,
   Mesh,
   PlaneGeometry,
   Vector3,
@@ -46,6 +46,7 @@ export const TerrainChunkCube: React.FC<TerrainChunkCubeProps> = ({
   const [hovered, setHover] = React.useState(false);
 
   const generateHeight = (v: Vector3) => {
+    // TODO, lerp between height generators based on multiplier
     return heightGenerators[0].get(v.x, v.y, v.z)[0];
   };
 
@@ -172,7 +173,16 @@ export const TerrainChunkCube: React.FC<TerrainChunkCubeProps> = ({
     plane.setAttribute("tangent", new Float32BufferAttribute(tangents, 4));
     plane.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
     plane.setIndex(new BufferAttribute(new Uint32Array(indices), 1));
-  }, [planeRef, meshRef, width, scale, subdivisions, offset, heightGenerators]);
+  }, [
+    planeRef,
+    meshRef,
+    width,
+    scale,
+    subdivisions,
+    offset,
+    heightGenerators,
+    colourGenerator,
+  ]);
 
   return (
     <mesh
@@ -197,8 +207,9 @@ export const TerrainChunkCube: React.FC<TerrainChunkCubeProps> = ({
       <bufferGeometry ref={planeRef} />
       <meshStandardMaterial
         wireframe={wireframe}
-        side={DoubleSide}
-        color={new Color("purple")}
+        side={FrontSide}
+        vertexColors
+        // color={new Color("purple")}
       />
       {children}
     </mesh>

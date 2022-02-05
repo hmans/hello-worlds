@@ -97,10 +97,14 @@ export const TerrainChunksCube: React.FC = () => {
     noiseType: NOISE_STYLES.simplex,
     seed: 1,
     snow: "#fff",
-    deepOcean: "#fff",
-    shallowOcean: "#fff",
-    forestBoreal: "#fff",
-    seaLevel: 0.5,
+    deepOcean: new Color(0x20020ff).getStyle(),
+    shallowOcean: new Color(0x40e2ff).getStyle(),
+    forestBoreal: new Color(0x29c100).getStyle(),
+    seaLevel: {
+      min: 0,
+      value: 0.05,
+      step: 0.0001,
+    },
   });
 
   const biomes = useMemo(
@@ -124,14 +128,6 @@ export const TerrainChunksCube: React.FC = () => {
   const heightGenerators = useMemo(() => {
     return [new HeightGenerator(noise, new Vector3(), 100000, 100000 + 1)];
   }, [noise]);
-
-  const cellIndex = (p: Vector3) => {
-    const xp = p.x + planet.minCellSize * 0.5;
-    const yp = p.z + planet.minCellSize * 0.5;
-    const x = Math.floor(xp / planet.minCellSize);
-    const z = Math.floor(yp / planet.minCellSize);
-    return [x, z];
-  };
 
   React.useEffect(() => {
     if (!rootGroupRef.current) {
