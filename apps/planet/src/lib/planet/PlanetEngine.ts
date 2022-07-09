@@ -209,7 +209,7 @@ export default class PlanetEngine {
     this.rootGroup.add(...this.cubeFaceGroups);
     this.geology = new Geology({ radius: this.planetProps.radius });
     this.rootGroup.add(this.geology.mesh);
-    this.cubeFaceGroups.forEach((group) => (group.visible = false));
+    // this.cubeFaceGroups.forEach((group) => (group.visible = false));
   }
 
   // for debugging threads
@@ -306,7 +306,7 @@ export default class PlanetEngine {
           heightGeneratorParams: {
             min: this.planetProps.minRadius,
             max: this.planetProps.maxRadius,
-            tileMap: this.geology.tileMap,
+            // tileMap: this.geology.tileMap,
           },
           origin: anchor,
           width: parentChunkProps.size,
@@ -320,17 +320,5 @@ export default class PlanetEngine {
     }
 
     this.#chunkMap = newChunkMap;
-
-    // for (let key in this.#chunkMap) {
-    //   const chunk = this.#chunkMap[key];
-    //   if (chunk.type === ChunkTypes.CHILD) {
-    //     chunk.chunk.update(anchor);
-    //   }
-    // }
-    // for (let chunk of this.#builder.old) {
-    //   if (chunk.type === ChunkTypes.CHILD) {
-    //     chunk.chunk.update(anchor);
-    //   }
-    // }
   }
 }

@@ -1,6 +1,6 @@
 import { BufferGeometry, Float32BufferAttribute, Vector3 } from "three";
 
-function slerp(p0, p1, t) {
+function slerp(p0: Vector3, p1: Vector3, t: number) {
   var omega = Math.acos(p0.dot(p1));
   return p0
     .clone()
@@ -330,19 +330,31 @@ export function generateSubdividedIcosahedron(degree: number) {
   return { nodes: nodes, edges: edges, faces: faces };
 }
 
-export const generateIcosahedronBufferGeometry = (nodes: { p: Vector3 }[]) => {
-  console.log(nodes);
+export const generateIcosahedronBufferGeometry = (ico: any) => {
   const geometry = new BufferGeometry();
-  const positions = new Float32Array(nodes.length * 3);
-  for (let i = 0, n = nodes.length; i < n; i++) {
-    const {
-      p: { x, y, z },
-    } = nodes[i];
-    const p = i * 3;
-    positions[p] = x * 1000;
-    positions[p + 1] = y * 1000;
-    positions[p + 2] = z * 1000;
+  const { edges, faces, nodes } = ico;
+  const positions = new Float32Array(faces.length * 3);
+  for (let i = 0, n = faces.length; i < n; i++) {
+    const { n: nodeFromFace } = faces[i];
+
+    for (let n = 0; n < nodeFromFace.length; n++) {
+      const nodeIndex = nodeFromFace[n];
+      const p = nodes[nodeIndex].p;
+
+      positions[i * 3 + n] = p.x;
+      positions[i * 3 + n + 1] = p.y;
+      positions[i * 3 + n + 2] = p.z;
+    }
+
+    // const p1 = nodes[n1].p;
+    // const p2 = nodes[n2].p;
+
+    // let p = i * 3;
+    // positions[p] = p0.x;
+    // positions[p + 1] = p0.y;
+    // positions[p + 2] = p0.z;
   }
+  console.log(positions);
   geometry.setAttribute("position", new Float32BufferAttribute(positions, 3));
   return geometry;
 };

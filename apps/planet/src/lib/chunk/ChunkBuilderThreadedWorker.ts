@@ -24,7 +24,7 @@ class ChunkBuilderThreadedWorker {
     this.#heightGenerators = [
       new HeightGenerator({
         generator: this.#noise,
-        tileMap: this.params.heightGeneratorParams.tileMap,
+        // tileMap: this.params.heightGeneratorParams.tileMap,
         // offset: this.#offset,
         // minRadius: params.heightGeneratorParams.min,
         // maxRadius: params.heightGeneratorParams.max,

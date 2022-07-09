@@ -2,13 +2,38 @@ import * as THREE from "three";
 import { BufferGeometry, MathUtils, Vector3 } from "three";
 import { Face, HalfEdge } from "./Face";
 
+export const randomUnitVector = () => {
+  var theta = MathUtils.randFloat(0, Math.PI * 2);
+  var phi = Math.acos(MathUtils.randFloat(-1, 1));
+  var sinPhi = Math.sin(phi);
+  return new Vector3(
+    Math.cos(theta) * sinPhi,
+    Math.sin(theta) * sinPhi,
+    Math.cos(phi)
+  );
+};
+
 export class EdgeHelper {
   public faces: Face[];
   public edges: HalfEdge[];
+  public edgeMap: Record<string, { edge: HalfEdge; neighbors: HalfEdge[] }>;
   constructor(geometry: BufferGeometry) {
     const { faces, edges } = getEdges(geometry);
     this.faces = faces;
     this.edges = edges;
+    this.edgeMap = {};
+    for (let i = 0; i < this.edges.length; i++) {
+      const edge = this.edges[i];
+      const edgeMapItem = this.edgeMap[JSON.stringify(edge.vertex)];
+      if (edgeMapItem) {
+        edgeMapItem.neighbors = [...edgeMapItem.neighbors, edge.twin.prev];
+      } else {
+        this.edgeMap[JSON.stringify(edge.vertex)] = {
+          edge,
+          neighbors: [edge.twin.prev],
+        };
+      }
+    }
   }
 
   get randomEdge() {
@@ -19,7 +44,6 @@ export class EdgeHelper {
 }
 
 export const getEdges = (geometry: BufferGeometry) => {
-  const initialFaceColor = new THREE.Color(1, 1, 1);
   const { position } = geometry.attributes;
   const faces: Face[] = [];
   const edges: HalfEdge[] = [];
@@ -35,7 +59,6 @@ export const getEdges = (geometry: BufferGeometry) => {
     edges.push(newFace.edge);
     edges.push(newFace.edge.next);
     edges.push(newFace.edge.prev);
-    newFace.color = initialFaceColor;
     faces.push(newFace);
   }
 

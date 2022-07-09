@@ -1,4 +1,3 @@
-import { TileMap } from "../geology/Geology";
 import { NoiseParams } from "../noise/Noise";
 import {
   ChunkMap,
@@ -42,7 +41,7 @@ export interface AllocateChunkProps {
   heightGeneratorParams: {
     min: number;
     max: number;
-    tileMap: TileMap;
+    // tileMap: TileMap;
   };
   group: THREE.Object3D;
   offset: THREE.Vector3;

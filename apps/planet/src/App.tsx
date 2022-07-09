@@ -17,7 +17,7 @@ function App() {
         })} */}
         <PlanetGenerator />
         {/* <FloatingOriginScene><OrbitControls /></FloatingOriginScene> */}
-        {/* <FlyControls /> */}
+        {/* <FlyCamera /> */}
         {/* <PlayerSpawner /> */}
         {/* <RenderPlayers /> */}
         {/* <FlyCamera /> */}

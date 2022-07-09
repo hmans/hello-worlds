@@ -23,6 +23,7 @@ const Planet = React.forwardRef<
       numWorkers,
     })
   );
+  // const [plates, setPlates] = React.useState<TectonicPlate[]>([]);
 
   // const geology = React.useMemo(
   //   () => new Geology({ radius: planetProps.radius || 4_000 }),
@@ -38,6 +39,7 @@ const Planet = React.forwardRef<
     };
     // TODO: this needs to be throttled somehow?
     planetEngine.rebuild();
+    // setPlates(planetEngine.geology.plates);
   }, [planetProps]);
 
   React.useLayoutEffect(() => {
@@ -69,6 +71,13 @@ const Planet = React.forwardRef<
     <>
       <PlanetContext.Provider value={planetEngine}>
         <group ref={planetGroupRef}>{children}</group>
+        {/* {plates.map((plate) => {
+          return (
+            <group key={plate.name} position={plate.root.vertex}>
+              <Text>{plate.name}</Text>
+            </group>
+          );
+        })} */}
       </PlanetContext.Provider>
     </>
   );
